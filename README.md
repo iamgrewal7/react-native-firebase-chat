@@ -1,1 +1,1 @@
-# react-native-firebase-chat
+# Chat Application in React Native and Firebase
