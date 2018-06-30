@@ -12,7 +12,10 @@ export default class Home extends React.Component {
       <Container style = {styles.container}>
         <Text style = {styles.text}>Enter Your Name</Text>
         <Item style = {{marginTop:20,borderColor:'black',width:300}}>
-          <Input style = {{fontSize:24}} placeholder = "John Snow"
+          <Input
+          style = {{fontSize:24}}
+          placeholder = "John Snow"
+
           onChangeText = {(text) =>{
             this.setState({
               name:text,
