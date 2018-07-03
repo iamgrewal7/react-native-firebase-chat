@@ -1,36 +1,13 @@
 import React from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Icon,Container } from 'native-base';
+import Backend from '../Backend';
 
 export default class Chat extends React.Component {
   state = {
     messages:[],
   };
-
-  componentWillMount(){
-    this.setState({
-      messages:[
-        {
-            _id:1,
-            text:'Hello',
-            createdAt: new Date(),
-            user:{
-              _id:2,
-              name:'React Native',
-              avatar:'https://www.freeiconspng.com/uploads/facebook-love-emoji-png-10.png',
-            },
-        },
-      ],
-    })
-  };
-
-  onSend(messages = []){
-    this.setState(previousState =>({
-      messages: GiftedChat.append(previousState.messages,messages),
-    }))
-  }
-
-  render() {
+render() {
     return (
       <Container style = {{backgroundColor:'rgb(247,247,247)'}}>
         <Container style = {{backgroundColor:'white',marginBottom:40}}>
@@ -38,13 +15,28 @@ export default class Chat extends React.Component {
           bottomOffset = {30}
           loadEarlier={true}
           messages={this.state.messages}
-          onSend={messages => this.onSend(messages)}
+          onSend={(message) => {
+            Backend.sendMessage(message)
+          }}
           user={{
-          _id: 1,
+          _id: Backend.getUid(),
+          name: this.props.name,
           }}
           />
           </Container>
      </Container>
     );
+  }
+  componentDidMount(){
+    Backend.loadMessages((message)=>{
+      this.setState((previousState) =>{
+        return{
+          messages:GiftedChat.append(previousState.messages,message)
+        };
+      });
+    });
+  }
+  componentWillMount(){
+    Backend.closeChat();
   }
 }
